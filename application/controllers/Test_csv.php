@@ -67,11 +67,31 @@ class Test_csv extends CI_Controller {
                     if($skip != 0){
                         $pasien_baru = array(
                             'ID' => $data_pasien[0],
-                            'NAMA' => $data_pasien[1],
-                            'DEPARTEMEN' => $data_pasien[2],
-                            'ASAL' => $data_pasien[3],
-                            'UMUR' => $data_pasien[4],
-                            'HOBI'=> $data_pasien[5]
+                            'AGE' => $data_pasien[1],
+                            'BP' => $data_pasien[2],
+                            'SG' => $data_pasien[3],
+                            'AL' => $data_pasien[4],
+                            'SU' => $data_pasien[5],
+                            'RBC' => $data_pasien[6],
+                            'PC' => $data_pasien[7],
+                            'PCC' => $data_pasien[8],
+                            'BA' => $data_pasien[9],
+                            'BGR' => $data_pasien[10],
+                            'BU' => $data_pasien[11],
+                            'SC' => $data_pasien[12],
+                            'SOD' => $data_pasien[13],
+                            'POT' => $data_pasien[14],
+                            'HEMO' => $data_pasien[15],
+                            'PCV' => $data_pasien[16],
+                            'WBCC' => $data_pasien[17],
+                            'RBCC' => $data_pasien[18],
+                            'HTN' => $data_pasien[19],
+                            'DM' => $data_pasien[20],
+                            'CAD' => $data_pasien[21],
+                            'APPET' => $data_pasien[22],
+                            'PE' => $data_pasien[23],
+                            'ANE' => $data_pasien[24],
+                            'CLASS' => $data_pasien[25],
                         );
                         $this->test_csv_model->insert_record($pasien_baru);
                     }
