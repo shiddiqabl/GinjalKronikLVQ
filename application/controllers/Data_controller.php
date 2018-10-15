@@ -16,9 +16,17 @@ class Data_controller extends CI_Controller{
         $this->load->view('templates/footer');
     }
     
+    function data_baru()
+    {
+        $data['judul'] = 'Tambah Data Pasien Baru';
+        $this->load->view('templates/header', $data);
+        $this->load->view('data_baru_view');
+        $this->load->view('templates/footer');
+    }
+    
     function importcsv()
     {
-        $data['data_pasien'] = $this->import_model->get_data();
+        $data['data_pasien'] = $this->data_model->get_data();
         $data['error'] = '';    //initialize image upload error array to empty
         
         $config['upload_path'] = './uploads/';
@@ -29,11 +37,15 @@ class Data_controller extends CI_Controller{
         
         
         // If upload failed, display error
-        if (!$this->upload->do_upload())
+        if (!$this->upload->do_upload('data_pasien'))
         {
+            $error_message = $this->upload->display_errors();
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">'.$error_message.'</div>');
+            redirect('data_controller/index');
+            /*
             $data['error'] = $this->upload->display_errors();
             
-            $this->load->view('view_data', $data);
+            $this->load->view('data_view', $data);*/
         } else
         {
             $file_data = $this->upload->data();
@@ -45,7 +57,7 @@ class Data_controller extends CI_Controller{
             {
                 //If opening file failed
                 $data['error'] = "Error occured";
-                $this->load->view('view_data', $data);
+                $this->load->view('data_view', $data);
             }
             else
             {
@@ -102,13 +114,20 @@ class Data_controller extends CI_Controller{
                             'ANE' => $data_pasien[24],
                             'CLASS' => $data_pasien[25],
                         );
-                        $this->import_model->insert_data($pasien_baru);
+                        $this->data_model->insert_data($pasien_baru);
                     }
                     $skip ++;
                 }
                 $this->session->set_flashdata('success', 'Data pasien baru berhasil dimasukkan');
-                redirect(base_url().'import_data');
+                redirect(base_url().'data_controller/index');
             }
         }
+    }
+    
+    function hapus_data()
+    {
+        $this->data_model->delete_data();
+        $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Data pasien berhasil dihapus</div>');
+        redirect('data_controller/index');        
     }
 }

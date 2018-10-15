@@ -34,7 +34,12 @@
             <?php if ($this->session->flashdata('success') == TRUE): ?>
                 <div class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></div>
             <?php endif; ?>
- 
+ 			<?php 
+				if($this->session->flashdata('message'))
+				{
+					echo $this->session->flashdata('message');
+				}
+			?>	  
             <h2>Data Pasien</h2>
                 <form method="post" action="<?php echo base_url() ?>import_data/importcsv" enctype="multipart/form-data">
                     <input type="file" name="userfile" ><br><br>
