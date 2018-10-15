@@ -24,4 +24,9 @@ class Data_model extends CI_Model {
     {
         $this->db->insert('data_pasien', $data);
     }
+    
+    function delete_data()
+    {
+        $this->db->empty_table('data_pasien');
+    }
 }

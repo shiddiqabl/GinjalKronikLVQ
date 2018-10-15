@@ -29,9 +29,13 @@ class Import_data extends CI_Controller {
         // If upload failed, display error
         if (!$this->upload->do_upload()) 
         {
-            $data['error'] = $this->upload->display_errors();
+            $error_message = $this->upload->display_errors();
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">'.$error_message.'</div>');
+            redirect('data_controller/index');
             
-            $this->load->view('view_data', $data);
+            /*$data['error'] = $this->upload->display_errors();
+            
+            $this->load->view('view_data', $data);*/
         } else 
         {
             $file_data = $this->upload->data();

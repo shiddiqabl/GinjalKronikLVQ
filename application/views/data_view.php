@@ -6,23 +6,28 @@
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
-            <!-- /.row -->
+            <!-- /.row -->           
             <div class="row">
             	<div class="col-lg-12">
-            		<a href="<?php echo base_url(); ?>data_controller/index" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            		<a href="<?php echo base_url(); ?>data_controller/data_baru" class="btn btn-outline btn-success btn-lg btn-block" role="button">
             			Data Penyakit Baru
             		</a>
-            		<a href="<?php echo base_url(); ?>data_controller/index" class="btn btn-outline btn-danger btn-lg btn-block" role="button">
+            		<button type="button" class="btn btn-outline btn-danger btn-lg btn-block" data-toggle="modal" data-target="#delete_modal"							
+							data-url="<?php echo base_url();?>data_controller/hapus_data"> 
+							Hapus Data Pasien
+					</button> 
+            		<!--  <a href="<?php echo base_url(); ?>data_controller/index" class="btn btn-outline btn-danger btn-lg btn-block" role="button">
             			Hapus Data Penyakit
-            		</a>             		
+            		</a> -->            		
             		<br>
-            	</div>
-             <?php 
-				if($this->session->flashdata('message')){
+            	</div>            	
+            </div>
+            <?php 
+				if($this->session->flashdata('message'))
+				{
 					echo $this->session->flashdata('message');
 				}
-			?>	
-            </div>
+			?>	            
             <div class="row">
                 <div  class="col-lg-12">
                     <div class="panel panel-default">
@@ -68,7 +73,7 @@
                         				<tr><td colspan="4">There are currently No Addresses</td></tr>
                    					<?php else: ?>
                                 	<?php 									
-									foreach($data_pasien as $d){
+									foreach($data_pasien as $row){
 								    ?>
                                 	<tr>                                    	
                                     	<td><?php echo $row['ID']; ?></td>
@@ -110,14 +115,42 @@
                 </div>
             </div>    
             <!-- /.row -->
-            		 
+        <!-- Modal -->
+		<div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  			<div class="modal-dialog" role="document">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        				<h4 class="modal-title" id="myModalLabel">Hapus Data Provinsi</h4>
+      				</div>
+      				<div class="modal-body">
+        				Apakah anda yakin akan menghapus data pasien ? 
+      				</div>
+      				<div class="modal-footer">
+        				<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+        				<a id="link_hapus" href=""><button type="button" class="btn btn-danger" >Hapus</button></a>
+      				</div>
+   				 </div>
+  			</div>
+		</div>		 
+		
 		<script>
+		$(document).ready( function (){
+			$('#delete_modal').on('show.bs.modal', function (event) {
+				  var button = $(event.relatedTarget) // Button that triggered the modal				  					 
+				  var url = button.data('url') 
+				  console.log(url)
+				  				  
+				  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+				  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+				  var modal = $(this)				  
+				  modal.find('#link_hapus').attr('href', url)
+				})			
+		});
 			$('#dataTables-example').dataTable( {
 				"scrollX": true
 			} );
-			$(document).ready( function (){				
-				
-			});
+			
 		</script>
 		
             
