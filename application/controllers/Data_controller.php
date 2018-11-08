@@ -136,10 +136,22 @@ class Data_controller extends CI_Controller{
     function exportcsv($table)
     {
         //Membuat nama file dan mempersiapkan header HTTP
-        $filename = $table;
-        header("Content-Description : File Transfer");
-        header("Content-Disposition : attachment; filename = $filename");
-        header("Content-Type : application/csv; ");
+        $filename = $table.".csv";
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename = $filename");
+        header("Content-Type: application/csv; ");
+        
+        //Ambil data dari database
+        $data_pasien = $this->data_model->get_data($table);
+        
+        //Membuat file
+        $file = fopen('php://output', 'w');
+        
+        foreach ($data_pasien as $data_export){
+            fputcsv($file, $data_export);
+        }
+        fclose($file);
+        exit; 
     }
     
     function hapus_data($table)

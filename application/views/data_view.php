@@ -15,6 +15,9 @@
             		<a href="<?php echo base_url(); ?>data_controller/norm_min_max" class="btn btn-outline btn-success btn-lg btn-block" role="button">
             			Data Normalisasi Min-Max
             		</a>
+            		<a href="<?php echo base_url(); ?>data_controller/exportcsv/data_pasien" class="btn btn-outline btn-info btn-lg btn-block" role="button">
+            			Export Data Pasien
+            		</a>
             		<button type="button" class="btn btn-outline btn-danger btn-lg btn-block" data-toggle="modal" data-target="#delete_modal"							
 							data-url="<?php echo base_url();?>data_controller/hapus_data/data_pasien"> 
 							Hapus Data Pasien
