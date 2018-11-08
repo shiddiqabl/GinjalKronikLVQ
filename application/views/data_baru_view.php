@@ -15,7 +15,7 @@
                        	<div class="panel-body">
                        		<div class="row">
                        		<div class="col-lg-6">							
-								<form method="post" action="<?php echo base_url() ?>data_controller/importcsv"  enctype="multipart/form-data">																	
+								<form method="post" action="<?php echo base_url() ?>data_controller/importcsv/data_pasien"  enctype="multipart/form-data">																	
 									<div class="form-group">
 										<label>Pilih Data</label>
 										<input type="file" name="data_pasien">

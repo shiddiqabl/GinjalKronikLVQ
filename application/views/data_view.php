@@ -12,13 +12,13 @@
             		<a href="<?php echo base_url(); ?>data_controller/data_baru" class="btn btn-outline btn-success btn-lg btn-block" role="button">
             			Data Penyakit Baru
             		</a>
+            		<a href="<?php echo base_url(); ?>data_controller/norm_min_max" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Data Normalisasi Min-Max
+            		</a>
             		<button type="button" class="btn btn-outline btn-danger btn-lg btn-block" data-toggle="modal" data-target="#delete_modal"							
-							data-url="<?php echo base_url();?>data_controller/hapus_data"> 
+							data-url="<?php echo base_url();?>data_controller/hapus_data/data_pasien"> 
 							Hapus Data Pasien
-					</button> 
-            		<!--  <a href="<?php echo base_url(); ?>data_controller/index" class="btn btn-outline btn-danger btn-lg btn-block" role="button">
-            			Hapus Data Penyakit
-            		</a> -->            		
+					</button>           		           		
             		<br>
             	</div>            	
             </div>
@@ -44,7 +44,8 @@
                         				<th>ID</th>
                         				<th>Age</th>
                         				<th>Blood Pressure</th>
-                        				<th>Specific Albumin</th>
+                        				<th>Specific Gravity</th>
+                        				<th>Albumin</th>
                         				<th>Sugar</th>
                         				<th>RBC</th>
                         				<th>Pus Cell</th>
@@ -121,7 +122,7 @@
     			<div class="modal-content">
       				<div class="modal-header">
         				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        				<h4 class="modal-title" id="myModalLabel">Hapus Data Provinsi</h4>
+        				<h4 class="modal-title" id="myModalLabel">Hapus Data Pasien</h4>
       				</div>
       				<div class="modal-body">
         				Apakah anda yakin akan menghapus data pasien ? 

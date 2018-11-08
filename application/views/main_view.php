@@ -29,7 +29,7 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body" >
                         <div class="table-responsive" >
-                            <table class="table table-striped table-bordered table-hover display nowrap" id="dataTables-data"
+                            <table class="table table-striped table-bordered table-hover table-responsive display nowrap" id="dataTables-example"
                             style="width:100%"  >
                                 <thead>
                                      <tr>
@@ -110,7 +110,7 @@
             <!-- /.row -->
             		 
 		<script>
-			$('#dataTables-data').DataTable( {
+			$('#dataTables-example').DataTable( {
 				"scrollX": true
 			} );
 			$(document).ready( function (){				
