@@ -2,24 +2,21 @@
         <div id="page-wrapper">
 			<div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Data Penyakit Ginjal</h1>
+                    <h1 class="page-header">Data Penyakit Ginjal Normalisasi Min Max</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->           
             <div class="row">
             	<div class="col-lg-12">
-            		<a href="<?php echo base_url(); ?>data_controller/data_baru" class="btn btn-outline btn-success btn-lg btn-block" role="button">
-            			Data Penyakit Baru
+            		<a href="<?php echo base_url(); ?>Minmax_controller/min_max" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Normalisasi Data 
             		</a>
-            		<a href="<?php echo base_url(); ?>Minmax_controller/index" class="btn btn-outline btn-success btn-lg btn-block" role="button">
-            			Data Normalisasi Min-Max
-            		</a>
-            		<a href="<?php echo base_url(); ?>data_controller/exportcsv/data_pasien" class="btn btn-outline btn-info btn-lg btn-block" role="button">
-            			Export Data Pasien
-            		</a>
+            		<a href="<?php echo base_url(); ?>Minmax_controller/exportcsv/data_pasien_min_max" class="btn btn-outline btn-info btn-lg btn-block" role="button">
+            			Export Data Pasien Min Max
+            		</a>             		
             		<button type="button" class="btn btn-outline btn-danger btn-lg btn-block" data-toggle="modal" data-target="#delete_modal"							
-							data-url="<?php echo base_url();?>data_controller/hapus_data/data_pasien"> 
+							data-url="<?php echo base_url();?>Minmax_controller/hapus_data/data_pasien_min_max"> 
 							Hapus Data Pasien
 					</button>           		           		
             		<br>
@@ -35,7 +32,7 @@
                 <div  class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                           Data Penyakit Ginjal
+                           Data Penyakit Ginjal yang Sudah Dilakukan Normalisasi Min-Max
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body" >
@@ -125,10 +122,10 @@
     			<div class="modal-content">
       				<div class="modal-header">
         				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        				<h4 class="modal-title" id="myModalLabel">Hapus Data Pasien</h4>
+        				<h4 class="modal-title" id="myModalLabel">Hapus Data Pasien </h4>
       				</div>
       				<div class="modal-body">
-        				Apakah anda yakin akan menghapus data pasien ? 
+        				Apakah anda yakin akan menghapus data pasien normalisasi min max ? 
       				</div>
       				<div class="modal-footer">
         				<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
