@@ -158,7 +158,7 @@ class Data_controller extends CI_Controller{
     {
         $this->data_model->delete_data($table);
         $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Data berhasil dihapus</div>');
-        redirect('data_controller/norm_min_max');        
+        redirect('data_controller/index');        
     }
     
     function min_max()
