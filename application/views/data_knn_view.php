@@ -2,24 +2,21 @@
         <div id="page-wrapper">
 			<div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Data Penyakit Ginjal Normalisasi Min Max</h1>
+                    <h1 class="page-header">Data Penyakit Pengisian Nilai Kosong (Normalisasi KNN)</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->           
             <div class="row">
             	<div class="col-lg-12">
-            		<a href="<?php echo base_url(); ?>Minmax_controller/min_max" class="btn btn-outline btn-success btn-lg btn-block" role="button">
-            			Normalisasi Data 
-            		</a>
-            		<a href="<?php echo base_url(); ?>Knn_controller/index" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            		<a href="<?php echo base_url(); ?>Knn_controller/knn_norm" class="btn btn-outline btn-success btn-lg btn-block" role="button">
             			Isi Nilai Kosong 
             		</a>
-            		<a href="<?php echo base_url(); ?>Minmax_controller/exportcsv/data_pasien_min_max" class="btn btn-outline btn-info btn-lg btn-block" role="button">
-            			Export Data Pasien Min Max
+            		<a href="<?php echo base_url(); ?>Knn_controller/exportcsv/data_pasien_knn" class="btn btn-outline btn-info btn-lg btn-block" role="button">
+            			Export Data Pasien KNN
             		</a>             		
             		<button type="button" class="btn btn-outline btn-danger btn-lg btn-block" data-toggle="modal" data-target="#delete_modal"							
-							data-url="<?php echo base_url();?>Minmax_controller/hapus_data/data_pasien_knn"> 
+							data-url="<?php echo base_url();?>Minmax_controller/hapus_data/data_pasien_min_max"> 
 							Hapus Data Pasien
 					</button>           		           		
             		<br>
@@ -35,7 +32,7 @@
                 <div  class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                           Data Penyakit Ginjal yang Sudah Dilakukan Pengisian Nilai Kosong Normalisasi KNN
+                           Data Penyakit Ginjal yang Sudah Dilakukan Normalisasi Min-Max
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body" >
@@ -105,7 +102,7 @@
                                         <td><?php echo $row['APPET']; ?></td>
                                         <td><?php echo $row['PE']; ?></td>
                                         <td><?php echo $row['ANE']; ?></td>
-                                        <td><?php echo $row['CLASS']; ?></td>									
+                                        <td><?php echo $row['CLASS']; ?></td>				
                                     </tr>
                                 <?php } ?>
                                 <?php endif; ?>

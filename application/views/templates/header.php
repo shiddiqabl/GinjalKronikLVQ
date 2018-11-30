@@ -89,16 +89,19 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">                       
                         <li>
-                            <a href="<?php echo base_url(); ?>home/index"><i class="fa fa-dashboard fa-fw"></i> Beranda</a>
+                            <a href="<?php echo base_url(); ?>Main/index"><i class="fa fa-dashboard fa-fw"></i> Beranda</a>
                         </li>                         
                          <li>
-                            <a href="#"><i class="fa fa-group fa-fw"></i> Daftar Perjalanan Dinas<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-group fa-fw"></i> Kelola Data Pasien<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="<?php echo base_url(); ?>home/index"> Terencana</a>
+                                    <a href="<?php echo base_url(); ?>Data_controller/index"> Data Pasien Baru</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo base_url(); ?>home/perjalanan_selesai_batal"> Selesai dan Dibatalkan</a>
+                                    <a href="<?php echo base_url(); ?>Minmax_controller/index"> Data Pasien Norm. Minmax</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>Knn_controller/index"> Data Pasien Norm. KNN</a>
                                 </li>
                             </ul>                            
                         </li>                                          
