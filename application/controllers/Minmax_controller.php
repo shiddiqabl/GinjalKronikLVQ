@@ -88,7 +88,8 @@ class Minmax_controller extends CI_Controller{
                 {
                     //Jika bukan numerik, data tidak dinormalisasi
                     $data_pasien_baru[$i][$j] = $data_pasien_alias[$i][$j];
-                }else //Jika data dalam sel numerik
+                }
+                else //Jika data dalam sel numerik
                 {
                     //Rumus min max : x(normal) = (x(lama) - x(min)) / (x(maks) - x(min))
                     $data_pasien_baru[$i][$j] = ($data_pasien_alias[$i][$j] - $min_kol[$j]) / ($max_kol[$j] - $min_kol[$j]);
