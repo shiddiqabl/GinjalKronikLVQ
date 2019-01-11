@@ -103,6 +103,9 @@
                                 <li>
                                     <a href="<?php echo base_url(); ?>Knn_controller/index"> Data Pasien Norm. KNN</a>
                                 </li>
+                                 <li>
+                                    <a href="<?php echo base_url(); ?>Sampling_controller/index"> Data Pasien Undersampling</a>
+                                </li>
                             </ul>                            
                         </li>                                          
                         <li>
