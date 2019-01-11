@@ -2,24 +2,33 @@
         <div id="page-wrapper">
 			<div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Data Penyakit Pengisian Nilai Kosong (Normalisasi KNN)</h1>
+                    <h1 class="page-header">Menyeimbangkan data penyakit (Undersampling)</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->           
             <div class="row">
             	<div class="col-lg-12">
-            		<a href="<?php echo base_url(); ?>Knn_controller/knn_norm" class="btn btn-outline btn-success btn-lg btn-block" role="button">
-            			Isi Nilai Kosong 
+            		<a href="<?php echo base_url(); ?>Sampling_controller/cb_undersampling" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Proses Undersampling
             		</a>
-            		<a href="<?php echo base_url(); ?>Sampling_controller/index" class="btn btn-outline btn-success btn-lg btn-block" role="button">
-            			Menyeimbangkan data 
+            		<a href="<?php echo base_url(); ?>Sampling_controller/kmeans" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Proses K-Means
             		</a>
-            		<a href="<?php echo base_url(); ?>Knn_controller/exportcsv/data_pasien_knn" class="btn btn-outline btn-info btn-lg btn-block" role="button">
+            		<a href="<?php echo base_url(); ?>Sampling_controller/centroid_index" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Centroid K-Means Akhir
+            		</a>
+            		<a href="<?php echo base_url(); ?>Sampling_controller/centroid_awal_index" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Centroid K-Means Awal
+            		</a>
+            		<a href="<?php echo base_url(); ?>Sampling_controller/kluster_index" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Anggota Kluster K-Means
+            		</a>                      		
+            		<a href="<?php echo base_url(); ?>Sampling_controller/exportcsv/data_pasien_sampling" class="btn btn-outline btn-info btn-lg btn-block" role="button">
             			Export Data Pasien KNN
             		</a>             		
             		<button type="button" class="btn btn-outline btn-danger btn-lg btn-block" data-toggle="modal" data-target="#delete_modal"							
-							data-url="<?php echo base_url();?>Minmax_controller/hapus_data/data_pasien_min_max"> 
+							data-url="<?php echo base_url();?>Sampling_controller/hapus_data/data_pasien_sampling"> 
 							Hapus Data Pasien
 					</button>           		           		
             		<br>
@@ -35,7 +44,7 @@
                 <div  class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                           Data Penyakit Ginjal yang Sudah Dilakukan Normalisasi Min-Max
+                           Data Penyakit Ginjal yang Sudah Dilakukan Undersampling
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body" >
@@ -77,7 +86,7 @@
                         				<tr><td colspan="4">Tidak ada data yang tersedia</td></tr>
                    					<?php else: ?>
                                 	<?php 									
-									foreach($data_pasien as $row){
+									foreach($data_pasien as $row ){
 								    ?>
                                 	<tr>                                    	
                                     	<td><?php echo $row['ID']; ?></td>
@@ -105,7 +114,7 @@
                                         <td><?php echo $row['APPET']; ?></td>
                                         <td><?php echo $row['PE']; ?></td>
                                         <td><?php echo $row['ANE']; ?></td>
-                                        <td><?php echo $row['CLASS']; ?></td>				
+                                        <td><?php echo $row['CLASS']; ?></td>
                                     </tr>
                                 <?php } ?>
                                 <?php endif; ?>

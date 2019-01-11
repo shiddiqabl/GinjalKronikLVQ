@@ -49,6 +49,87 @@ class Data_model extends CI_Model {
         $this->db->insert($table, $data);
     }
     
+    function insert_data_sampling($table, $data)
+    {
+        $this->db->flush_cache();
+        $this->db->empty_table($table);
+        $this->db->flush_cache();
+        foreach ($data as $data_pasien)
+        {
+            $data_sampling = array(
+                'ID' => $data_pasien[0],
+                'AGE' => $data_pasien[1],
+                'BP' => $data_pasien[2],
+                'SG' => $data_pasien[3],
+                'AL' => $data_pasien[4],
+                'SU' => $data_pasien[5],
+                'RBC' => $data_pasien[6],
+                'PC' => $data_pasien[7],
+                'PCC' => $data_pasien[8],
+                'BA' => $data_pasien[9],
+                'BGR' => $data_pasien[10],
+                'BU' => $data_pasien[11],
+                'SC' => $data_pasien[12],
+                'SOD' => $data_pasien[13],
+                'POT' => $data_pasien[14],
+                'HEMO' => $data_pasien[15],
+                'PCV' => $data_pasien[16],
+                'WBCC' => $data_pasien[17],
+                'RBCC' => $data_pasien[18],
+                'HTN' => $data_pasien[19],
+                'DM' => $data_pasien[20],
+                'CAD' => $data_pasien[21],
+                'APPET' => $data_pasien[22],
+                'PE' => $data_pasien[23],
+                'ANE' => $data_pasien[24],
+            );
+            $this->db->replace($table, $data_sampling);
+        }
+    }
+    
+    function update_centroid($table, $centroid)
+    {
+        $this->db->flush_cache();
+        $this->db->empty_table($table);
+        $this->db->flush_cache();
+        foreach ($centroid as $data_pasien)
+        {
+            $kmeans_centroid = array(
+                'ID_CENTROID' => $data_pasien[0],
+                'AGE' => $data_pasien[1],
+                'BP' => $data_pasien[2],
+                'SG' => $data_pasien[3],
+                'AL' => $data_pasien[4],
+                'SU' => $data_pasien[5],
+                'RBC' => $data_pasien[6],
+                'PC' => $data_pasien[7],
+                'PCC' => $data_pasien[8],
+                'BA' => $data_pasien[9],
+                'BGR' => $data_pasien[10],
+                'BU' => $data_pasien[11],
+                'SC' => $data_pasien[12],
+                'SOD' => $data_pasien[13],
+                'POT' => $data_pasien[14],
+                'HEMO' => $data_pasien[15],
+                'PCV' => $data_pasien[16],
+                'WBCC' => $data_pasien[17],
+                'RBCC' => $data_pasien[18],
+                'HTN' => $data_pasien[19],
+                'DM' => $data_pasien[20],
+                'CAD' => $data_pasien[21],
+                'APPET' => $data_pasien[22],
+                'PE' => $data_pasien[23],
+                'ANE' => $data_pasien[24],                
+            );
+            $this->db->replace($table, $kmeans_centroid);
+        }
+    }
+    
+    function update_kluster($data)
+    {
+        $this->db->replace('kmeans_kluster', $data);
+    }
+    
     function delete_data($table)
     {
         $this->db->empty_table($table);
