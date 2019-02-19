@@ -82,6 +82,7 @@ class Data_model extends CI_Model {
                 'APPET' => $data_pasien[22],
                 'PE' => $data_pasien[23],
                 'ANE' => $data_pasien[24],
+                'CLASS' => $data_pasien[25]
             );
             $this->db->replace($table, $data_sampling);
         }
@@ -128,6 +129,30 @@ class Data_model extends CI_Model {
     function update_kluster($data)
     {
         $this->db->replace('kmeans_kluster', $data);
+    }
+    
+    function update_hsl_uji($id_fold, $detail, $w1, $w2, $hasil_uji)
+    {
+        $this->db->flush_cache();
+        $data_hasil = array(            
+            'ID_FOLD' => $id_fold,
+            'ALPHA_AWAL' => $detail['alpha_awal'],
+            'ALPHA_AKHIR' => $detail['alpha_akhir'],
+            'EPOCH_MAX' => $detail['epoch_max'],
+            'EPOCH_AKHIR' => $detail['epoch_akhir'],
+            'EPSILON' => $detail['epsilon'],            
+            'TRUE_POS' => $hasil_uji['true_pos'],
+            'FALSE_POS' => $hasil_uji['false_pos'],
+            'TRUE_NEG' => $hasil_uji['true_neg'],
+            'FALSE_NEG' => $hasil_uji['false_neg'],
+            'AKURASI' => $hasil_uji['akurasi'],
+            'ERROR' => $hasil_uji['error'],
+            'SENSITIFITAS' => $hasil_uji['sensitifitas'],
+            'SPESIFISITAS' => $hasil_uji['spesifisitas'],            
+            'W1' => implode(",", $w1),
+            'W2' => implode(",", $w2)
+        );        
+        $this->db->replace('hasil_pengujian_fold', $data_hasil);
     }
     
     function delete_data($table)
