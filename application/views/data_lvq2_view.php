@@ -38,7 +38,7 @@
                         <div class="panel-body" >
                         <div class="table-responsive" >
                             <table class="table table-striped table-bordered table-hover table-responsive display nowrap" id="dataTables-example"
-                            style="width:100%"  >
+                            style="width:100%">
                                 <thead>
                                      <tr>
                         				<th>ID Pengujian</th>
@@ -114,12 +114,12 @@
 				  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
 				  var modal = $(this)				  
 				  modal.find('#link_hapus').attr('href', url)
-				})			
+				})
+					
 		});
-			$('#dataTables-example').dataTable( {
-				"scrollX": true
-			} );
-			
+		$('#dataTables-example').dataTable( {
+			"scrollX": true
+		} );		 
 		</script>
 		
             

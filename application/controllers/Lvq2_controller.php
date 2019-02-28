@@ -123,19 +123,19 @@ class Lvq2_controller extends CI_Controller{
         $key_1 = null;
         $key_2 = null;
         //$alpha = 0.1;
-        $window = 0.2;
-        echo 'pelatihan epoch ke'.$epoch.' <br>';
+        $window = 0.3;
+        //echo 'pelatihan epoch ke'.$epoch.' <br>';
         //Periksa apabila variabel w1 dan w2 null
         if ((is_null($w1) AND is_null($w2)) == TRUE)
         {            
             //Isi variabel W1 dengan data dengan penyakit ginjal (CLASS = 1)
             $key_1 = array_search(1, array_column($fold['pelatihan'], 'CLASS'));
             $w1 = $fold['pelatihan'][$key_1];
-            echo 'W1 ID ke '.$w1['ID'].'<br>';
+            //echo 'W1 ID ke '.$w1['ID'].'<br>';
             //Isi variabel W2 dengan data dengan tanpa penyakit ginjal (CLASS = 0)
             $key_2 = array_search(0, array_column($fold['pelatihan'], 'CLASS'));
             $w2 = $fold['pelatihan'][$key_2];
-            echo 'W2 ID ke '.$w2['ID'].'<br>';
+            //echo 'W2 ID ke '.$w2['ID'].'<br>';
         }        
         
         for ($i = 0; $i < $jml_fold_latih; $i++)
@@ -229,7 +229,7 @@ class Lvq2_controller extends CI_Controller{
         if (($epoch >= $max_epoch) || ($alpha < $epsilon))
         {
             //Jika kondisi berhenti terpenuhi
-            echo 'Proses pelatihan berhenti <br>';
+            //echo 'Proses pelatihan berhenti <br>';
             //Masukkan detail pelatihan
             $detail['alpha_awal'] = $alpha_awal;
             $detail['alpha_akhir'] = $alpha;
@@ -266,13 +266,13 @@ class Lvq2_controller extends CI_Controller{
                 //Jika pemenang W1 dan kelas uji = 1
                 if ($w1['CLASS'] == $fold['pengujian'][$i]['CLASS'])
                 {
-                    echo 'Pemenang W1 dan kelas uji = 1, true_pos++<br>';
+                    //echo 'Pemenang W1 dan kelas uji = 1, true_pos++<br>';
                     $true_pos++;
                 }
                 else
                 //Jika pemenang W1 dan kelas uji = 0
                 {
-                    echo 'Pemenang W1 tapi kelas uji = 0, false_pos++ <br>';
+                    //echo 'Pemenang W1 tapi kelas uji = 0, false_pos++ <br>';
                     $false_pos++;
                 }
             }
@@ -280,12 +280,12 @@ class Lvq2_controller extends CI_Controller{
             {
                 if ($w2['CLASS'] == $fold['pengujian'][$i]['CLASS'])
                 {
-                    echo 'pemenang W2 dan kelas uji = 0, true_neg++ <br>';
+                    //echo 'pemenang W2 dan kelas uji = 0, true_neg++ <br>';
                     $true_neg++;
                 }
                 else
                 {
-                    echo 'pemenang W2 tapi kelas uji = 1, false_neg++ <br>';
+                    //echo 'pemenang W2 tapi kelas uji = 1, false_neg++ <br>';
                     $false_neg++;
                 }
             }
@@ -297,11 +297,11 @@ class Lvq2_controller extends CI_Controller{
         $sensitifitas = $true_pos / ($true_pos + $false_neg);
         $spesifisitas = $true_neg / ($true_neg + $false_pos);
         
-        echo 'True Positive = '.$true_pos.' dan False Positive = '.$false_pos.'<br>';
-        echo 'True Negative = '.$true_neg.' dan False Negative = '.$false_neg.'<br>';
-        echo 'Akurasi = '.$akurasi.' dan Error Rate = '.$error.'<br>';
-        echo 'Sensitifitas = '.$sensitifitas.' dan Spesifisitas = '.$spesifisitas.'<br>';
-        echo 'Alpha awal = '.$detail['alpha_awal'].' Alpha akhir '.$detail['alpha_akhir'].'<br>';
+        //echo 'True Positive = '.$true_pos.' dan False Positive = '.$false_pos.'<br>';
+        //echo 'True Negative = '.$true_neg.' dan False Negative = '.$false_neg.'<br>';
+        //echo 'Akurasi = '.$akurasi.' dan Error Rate = '.$error.'<br>';
+        //echo 'Sensitifitas = '.$sensitifitas.' dan Spesifisitas = '.$spesifisitas.'<br>';
+        //echo 'Alpha awal = '.$detail['alpha_awal'].' Alpha akhir '.$detail['alpha_akhir'].'<br>';
         
         //Update hasil pengujian fold
         $hasil_uji['true_pos'] = $true_pos;
@@ -317,11 +317,11 @@ class Lvq2_controller extends CI_Controller{
     
     function pengujian_avg($alpha, $epsilon, $max_epoch, $runtime)
     {
-        echo 'Pengujian AVG dimulai <br>';
+        //echo 'Pengujian AVG dimulai <br>';
         //Ambil data hasil uji tiap fold
         $hasil_uji_fold = $this->data_model->get_data('hasil_pengujian_fold');
         $jml_uji_fold = count(array_column($hasil_uji_fold, 'ID_FOLD'));
-        echo 'Jumlah hasil uji fold = '.$jml_uji_fold.'<br>';
+        //echo 'Jumlah hasil uji fold = '.$jml_uji_fold.'<br>';
         
         //Hitung data uji dan hasil uji rata-rata
         $hasil_uji['akurasi_avg'] = array_sum(array_column($hasil_uji_fold, 'AKURASI')) / $jml_uji_fold;
@@ -333,9 +333,9 @@ class Lvq2_controller extends CI_Controller{
         $hasil_uji['max_epoch'] = $max_epoch;
         
         
-        echo 'Rata-rata Akurasi = '.$hasil_uji['akurasi_avg'].' Rata-rata Error = '.$hasil_uji['error_avg'].'<br>';
-        echo 'Rata-rata sensitifitas = '.$hasil_uji['sensitifitas_avg'].' Rata-rata spesifisitas = '.$hasil_uji['spesifisitas_avg'].'<br>';
-        echo 'Waktu pengerjaan'.$runtime.'<br>';
+        //echo 'Rata-rata Akurasi = '.$hasil_uji['akurasi_avg'].' Rata-rata Error = '.$hasil_uji['error_avg'].'<br>';
+        //echo 'Rata-rata sensitifitas = '.$hasil_uji['sensitifitas_avg'].' Rata-rata spesifisitas = '.$hasil_uji['spesifisitas_avg'].'<br>';
+        //echo 'Waktu pengerjaan'.$runtime.'<br>';
         $hasil_uji['runtime'] = $runtime;
         
         //Memasukkan data ke database

@@ -48,7 +48,7 @@
                 	var alpha = $("#alpha").val();
                 	var epsilon = $("#epsilon").val();
 
-                	if (epsilon >= alpha){
+                	if (epsilon > alpha){
 						alert("Nilai Epsilon harus lebih kecil dari nilai Alpha");	
                    	}  
                 });
