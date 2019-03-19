@@ -44,13 +44,11 @@
                         				<th>ID Pengujian</th>
                         				<th>Alpha Awal</th>
                         				<th>Epsilon</th>
+                        				<th>Epoch Akhir Rata-rata</th>
                         				<th>Epoch Maksimal</th>
-                        				<th>Tanggal Pengujian</th>
-                        				<th>Akurasi</th>
-                        				<th>Error Rate</th>
+                        				<th>Tanggal Pengujian</th>                        				
                         				<th>Sensitifitas</th>
-                        				<th>Spesifisitas</th>
-                        				<th>Runtime</th>                        				
+                        				<th>Spesifisitas</th>                        				                     				
                     				</tr>
                                 </thead>
                                 <tbody>
@@ -64,13 +62,11 @@
                                     	<td><?php echo $row['ID_PENGUJIAN']; ?></td>
                                     	<td><?php echo $row['ALPHA_AWAL']; ?></td>
                                     	<td><?php echo $row['EPSILON']; ?></td>
+                                    	<td><?php echo $row['EPOCH_AKHIR_AVG']; ?></td>
                                     	<td><?php echo $row['EPOCH_MAX']; ?></td>
-                                    	<td><?php echo $row['DATE_TIME']; ?></td>
-                                        <td><?php echo $row['AKURASI']; ?></td>
-                                        <td><?php echo $row['ERROR']; ?></td>
+                                    	<td><?php echo $row['DATE_TIME']; ?></td>                                        
                                         <td><?php echo $row['SENSITIFITAS']; ?></td>
-                                        <td><?php echo $row['SPESIFISITAS']; ?></td>                                                                                
-                                        <td><?php echo $row['RUNTIME']; ?> s</td>                                       		
+                                        <td><?php echo $row['SPESIFISITAS']; ?></td> 
                                     </tr>
                                 <?php } ?>
                                 <?php endif; ?>

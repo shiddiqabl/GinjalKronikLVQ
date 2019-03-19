@@ -32,6 +32,8 @@
                            	<p class="form-control-static"><?php echo $hasil_uji_avg['alpha_awal']?></p>
                            	<label>Epsilon</label>
                            	<p class="form-control-static"><?php echo $hasil_uji_avg['epsilon']?></p>
+                           	<label>Epoch Akhir Rata-rata</label>
+                           	<p class="form-control-static"><?php echo $hasil_uji_avg['epoch_akhir_avg']?></p>
                            	<label>Epoch Maksimal</label>
                            	<p class="form-control-static"><?php echo $hasil_uji_avg['max_epoch']?></p>
                             <label>Akurasi</label>

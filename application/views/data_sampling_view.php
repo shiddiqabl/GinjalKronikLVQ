@@ -23,7 +23,10 @@
             		</a>
             		<a href="<?php echo base_url(); ?>Sampling_controller/kluster_index" class="btn btn-outline btn-success btn-lg btn-block" role="button">
             			Anggota Kluster K-Means
-            		</a>                      		
+            		</a>
+            		<!--  <a href="<?php echo base_url(); ?>Sampling_controller/kmeans_test" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Tes perhitungan K-Means buat laporan
+            		</a>-->                         		
             		<a href="<?php echo base_url(); ?>Sampling_controller/exportcsv/data_pasien_sampling" class="btn btn-outline btn-info btn-lg btn-block" role="button">
             			Export Data Pasien KNN
             		</a>             		
@@ -115,6 +118,33 @@
                                         <td><?php echo $row['PE']; ?></td>
                                         <td><?php echo $row['ANE']; ?></td>
                                         <td><?php echo $row['CLASS']; ?></td>
+                                        
+                                        <!-- <td><?php echo $row[0]; ?></td>
+                                        <td><?php echo $row[1]; ?></td>
+                                       	<td><?php echo $row[2]; ?></td>
+                                        <td><?php echo $row[3]; ?></td>
+                                       	<td><?php echo $row[4]; ?></td>
+                                        <td><?php echo $row[5]; ?></td>
+                                        <td><?php echo $row[6]; ?></td>
+                                        <td><?php echo $row[7]; ?></td>
+                                        <td><?php echo $row[8]; ?></td>
+                                        <td><?php echo $row[9]; ?></td>
+                                        <td><?php echo $row[10]; ?></td>
+                                        <td><?php echo $row[11]; ?></td>
+                                        <td><?php echo $row[12]; ?></td>
+                                        <td><?php echo $row[13]; ?></td>
+                                        <td><?php echo $row[14]; ?></td>
+                                        <td><?php echo $row[15]; ?></td>
+                                        <td><?php echo $row[16]; ?></td>
+                                        <td><?php echo $row[17]; ?></td>
+                                        <td><?php echo $row[18]; ?></td>
+                                        <td><?php echo $row[19]; ?></td>
+                                        <td><?php echo $row[20]; ?></td>
+                                        <td><?php echo $row[21]; ?></td>
+                                        <td><?php echo $row[22]; ?></td>
+                                        <td><?php echo $row[23]; ?></td>
+                                        <td><?php echo $row[24]; ?></td>
+                                        <td><?php echo $row[25]; ?></td>-->
                                     </tr>
                                 <?php } ?>
                                 <?php endif; ?>
@@ -137,7 +167,7 @@
         				<h4 class="modal-title" id="myModalLabel">Hapus Data Pasien </h4>
       				</div>
       				<div class="modal-body">
-        				Apakah anda yakin akan menghapus data pasien normalisasi min max ? 
+        				Apakah anda yakin akan menghapus data pasien sampling ? 
       				</div>
       				<div class="modal-footer">
         				<button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
