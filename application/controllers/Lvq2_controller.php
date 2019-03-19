@@ -121,8 +121,7 @@ class Lvq2_controller extends CI_Controller{
         //$jml_fold_uji = count(array_column($fold[0]['pengujian'], 'ID'));
         $jml_fold_latih = count(array_column($fold['pelatihan'], 'ID'));
         $key_1 = null;
-        $key_2 = null;
-        //$alpha = 0.1;
+        $key_2 = null;        
         $window = 0.3;
         //echo 'pelatihan epoch ke'.$epoch.' <br>';
         //Periksa apabila variabel w1 dan w2 null
@@ -330,6 +329,7 @@ class Lvq2_controller extends CI_Controller{
         $hasil_uji['spesifisitas_avg'] =  array_sum(array_column($hasil_uji_fold, 'SPESIFISITAS')) / $jml_uji_fold;
         $hasil_uji['alpha_awal'] = $alpha;
         $hasil_uji['epsilon'] = $epsilon;
+        $hasil_uji['epoch_akhir_avg'] =  array_sum(array_column($hasil_uji_fold, 'EPOCH_AKHIR')) / $jml_uji_fold;
         $hasil_uji['max_epoch'] = $max_epoch;
         
         
@@ -342,6 +342,7 @@ class Lvq2_controller extends CI_Controller{
         $hasil_uji_avg = array(
             'ALPHA_AWAL' => $alpha,
             'EPSILON' => $epsilon,
+            'EPOCH_AKHIR_AVG' => $hasil_uji['epoch_akhir_avg'],
             'EPOCH_MAX' => $max_epoch,
             'AKURASI' => $hasil_uji['akurasi_avg'],
             'ERROR' => $hasil_uji['error_avg'],
