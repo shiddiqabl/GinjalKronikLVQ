@@ -135,7 +135,7 @@ class Sampling_controller extends CI_Controller{
         $this->load->view('templates/header', $data);
         $this->load->view('data_sampling_view', $data);
         $this->load->view('templates/footer');
-    }
+    }  
     
     function kmeans()
     {
@@ -487,5 +487,142 @@ class Sampling_controller extends CI_Controller{
         $this->data_model->delete_data($table);
         $this->session->set_flashdata('message','<div class="alert alert-success" role="alert">Data berhasil dihapus</div>');
         redirect('Sampling_controller/index');
+    }
+    
+    //Fungsi berikut hanya untuk percobaan dalam membuat laporan
+    function kmeans_test()
+    {
+        $centroid = $this->data_model->get_data_alias_centroid('kmeans_centroid_awal')->result_array();
+        $data = $this->data_model->get_data_alias('data_pasien_knn')->result_array();
+        
+        //Inisialisasi array anggota kluster
+        foreach ($centroid as $key => $value) {
+            $anggota_kluster[$key]=[];
+        }
+        
+        //Nilai K
+        $k = 14;
+        $kolom = 26;
+        $jml_data = count($data) - 1;
+        
+        //Inisialisasi tabel jumlah anggota per kluster
+        $tabel_jml_angg = array();
+        for ($a = 0; $a < $k; $a++)
+        {
+            $tabel_jml_angg[$a][0] = $a;
+            $tabel_jml_angg[$a][1] = 0;
+        }
+        
+        for($j = 0; $j <= $jml_data; $j++)
+        {
+            $sum = array();
+            for($i = 0; $i < $k; $i++) //Mengulang sebanyak jumlah centroid (K)
+            {
+                $kol1 = pow(($data[$j][1] - $centroid[$i][1]),2);
+                $kol2 = pow(($data[$j][2] - $centroid[$i][2]),2);
+                $kol3 = pow(($data[$j][3] - $centroid[$i][3]),2);
+                $kol4 = pow(($data[$j][4] - $centroid[$i][4]),2);
+                $kol5 = pow(($data[$j][5] - $centroid[$i][5]),2);
+                $kol6 = pow(($data[$j][6] - $centroid[$i][6]),2);
+                $kol7 = pow(($data[$j][7] - $centroid[$i][7]),2);
+                $kol8 = pow(($data[$j][8] - $centroid[$i][8]),2);
+                $kol9 = pow(($data[$j][9] - $centroid[$i][9]),2);
+                $kol10 = pow(($data[$j][10] - $centroid[$i][10]),2);
+                $kol11 = pow(($data[$j][11] - $centroid[$i][11]),2);
+                $kol12 = pow(($data[$j][12] - $centroid[$i][12]),2);
+                $kol13 = pow(($data[$j][13] - $centroid[$i][13]),2);
+                $kol14 = pow(($data[$j][14] - $centroid[$i][14]),2);
+                $kol15 = pow(($data[$j][15] - $centroid[$i][15]),2);
+                $kol16 = pow(($data[$j][16] - $centroid[$i][16]),2);
+                $kol17 = pow(($data[$j][17] - $centroid[$i][17]),2);
+                $kol18 = pow(($data[$j][18] - $centroid[$i][18]),2);
+                $kol19 = pow(($data[$j][19] - $centroid[$i][19]),2);
+                $kol20 = pow(($data[$j][20] - $centroid[$i][20]),2);
+                $kol21 = pow(($data[$j][21] - $centroid[$i][21]),2);
+                $kol22 = pow(($data[$j][22] - $centroid[$i][22]),2);
+                $kol23 = pow(($data[$j][23] - $centroid[$i][23]),2);
+                $kol24 = pow(($data[$j][24] - $centroid[$i][24]),2);
+                $jarak[$i] = sqrt($kol1 + $kol2 + $kol3 + $kol4 + $kol5 + $kol6 + $kol7 + $kol8 + $kol9 + $kol10
+                    + $kol11 + $kol12 + $kol13 + $kol14 + $kol15 + $kol16 + $kol17 + $kol18 + $kol19 + $kol20
+                    + $kol21 + $kol22 + $kol23 + $kol24);
+            }
+            $min_jarak = min($jarak);
+            $kluster_pilih = array_search($min_jarak, $jarak);
+            $tabel_jml_angg[$kluster_pilih][1] = $tabel_jml_angg[$kluster_pilih][1] + 1;
+            //echo 'data ke - '.$j.' kluster terpilih : '.$kluster_pilih.'<br>';
+            $kluster[$j] = array($data[$j][0], $min_jarak, $kluster_pilih, $data[$j][25]);
+            for ($m = 1; $m < ($kolom - 1); $m++)
+            {
+                $anggota_kluster[$kluster_pilih][$m][] = $data[$j][$m];
+            }
+            //$anggota_kluster[$kluster_pilih][0][] = $data[$j][0];
+        }
+        
+        //Membuat centroid baru
+        $n = 6;
+        $new_centroid[$n][0] = $n;
+        $new_centroid[$n][1] = array_sum($anggota_kluster[$n][1]) / count($anggota_kluster[$n][1]);
+        $new_centroid[$n][2] = array_sum($anggota_kluster[$n][2]) / count($anggota_kluster[$n][2]);
+        $new_centroid[$n][3] = array_sum($anggota_kluster[$n][3]) / count($anggota_kluster[$n][3]);
+        $new_centroid[$n][4] = array_sum($anggota_kluster[$n][4]) / count($anggota_kluster[$n][4]);
+        $new_centroid[$n][5] = array_sum($anggota_kluster[$n][5]) / count($anggota_kluster[$n][5]);
+        $new_centroid[$n][6] = array_sum($anggota_kluster[$n][6]) / count($anggota_kluster[$n][6]);
+        $new_centroid[$n][7] = array_sum($anggota_kluster[$n][7]) / count($anggota_kluster[$n][7]);
+        $new_centroid[$n][8] = array_sum($anggota_kluster[$n][8]) / count($anggota_kluster[$n][8]);
+        $new_centroid[$n][9] = array_sum($anggota_kluster[$n][9]) / count($anggota_kluster[$n][9]);
+        $new_centroid[$n][10] = array_sum($anggota_kluster[$n][10]) / count($anggota_kluster[$n][10]);
+        $new_centroid[$n][11] = array_sum($anggota_kluster[$n][11]) / count($anggota_kluster[$n][11]);
+        $new_centroid[$n][12] = array_sum($anggota_kluster[$n][12]) / count($anggota_kluster[$n][12]);
+        $new_centroid[$n][13] = array_sum($anggota_kluster[$n][13]) / count($anggota_kluster[$n][13]);
+        $new_centroid[$n][14] = array_sum($anggota_kluster[$n][14]) / count($anggota_kluster[$n][14]);
+        $new_centroid[$n][15] = array_sum($anggota_kluster[$n][15]) / count($anggota_kluster[$n][15]);
+        $new_centroid[$n][16] = array_sum($anggota_kluster[$n][16]) / count($anggota_kluster[$n][16]);
+        $new_centroid[$n][17] = array_sum($anggota_kluster[$n][17]) / count($anggota_kluster[$n][17]);
+        $new_centroid[$n][18] = array_sum($anggota_kluster[$n][18]) / count($anggota_kluster[$n][18]);
+        $new_centroid[$n][19] = array_sum($anggota_kluster[$n][19]) / count($anggota_kluster[$n][19]);
+        $new_centroid[$n][20] = array_sum($anggota_kluster[$n][20]) / count($anggota_kluster[$n][20]);
+        $new_centroid[$n][21] = array_sum($anggota_kluster[$n][21]) / count($anggota_kluster[$n][21]);
+        $new_centroid[$n][22] = array_sum($anggota_kluster[$n][22]) / count($anggota_kluster[$n][22]);
+        $new_centroid[$n][23] = array_sum($anggota_kluster[$n][23]) / count($anggota_kluster[$n][23]);
+        $new_centroid[$n][24] = array_sum($anggota_kluster[$n][24]) / count($anggota_kluster[$n][24]);
+        
+        //Cek jumlah mayoritas dan minoritas per kluster
+        
+        //Inisialisasi tabel deskripsi kluster
+        for($c = 0; $c < 14; $c++)
+        {
+            $deskripsi_kluster[$c][0] = $c; //ID Kluster
+            $deskripsi_kluster[$c][1] = 0; //Jumlah mayoritas di kluster ke-i
+            $deskripsi_kluster[$c][2] = 0; //Jumlah minoritas di kluster ke-i
+        }
+        $data_kluster = $this->data_model->get_data('kmeans_kluster');
+        $data_alias = $this->data_model->get_data_alias('data_pasien_knn')->result_array();
+        $jumlah_data = count($data_kluster);
+        
+        for($b = 0; $b < $jumlah_data; $b++)
+        {
+            $id_pasien = $data_kluster[$b]['ID_PASIEN'];
+            $key = array_search($id_pasien, array_column($data_alias, 0));
+            $kluster = $data_kluster[$b]['KLUSTER'];
+            if ($data_kluster[$b]['CLASS'] == 1)
+            {
+                //Menambah jumlah mayoritas
+                $deskripsi_kluster[$kluster][1] += 1;
+                $mayoritas_per_kluster[$kluster][] = $data_alias[$key][0];
+            }
+            else
+            {
+                //Menambah jumlah minoritas
+                $deskripsi_kluster[$kluster][2] += 1;
+                $tabel_minoritas[] = $data_alias[$key];
+            }
+        }
+        
+        $this->session->set_flashdata('message','<div class="alert alert-success" role="alert"> Hasil Euclidean baris satu adalah = </div>');
+        $data['judul'] = 'Tes perhitungan sampling';
+        $data['data_pasien'] = $deskripsi_kluster;
+        $this->load->view('templates/header', $data);
+        $this->load->view('data_sampling_view', $data);
+        $this->load->view('templates/footer');
     }
 }

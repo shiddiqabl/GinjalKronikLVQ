@@ -54,6 +54,14 @@ class Data_model extends CI_Model {
         return $query;
     }
     
+    function get_data_selection($table, $atribut)
+    {
+        $this->db->select($atribut);        
+        $this->db->from($table);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
     function insert_data($table, $data) 
     {
         $this->db->insert($table, $data);
