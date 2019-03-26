@@ -73,6 +73,69 @@ class Lvq2_controller extends CI_Controller{
         $this->load->view('templates/footer');*/
     }
     
+    function create_fold_selection($atribut)
+    {
+        $k = 10;
+        $data_pasien_alfabet = $this->data_model->get_data_selection('data_pasien_sampling', $atribut);
+        $jml_data = count(array_column($data_pasien_alfabet, 'ID'));
+        $jml_kol = count($data_pasien_alfabet[0]);
+        
+        //Ubah kolom dari alfabetik ke numerik
+        $data_pasien = array();
+        for($x = 0; $x < $jml_data; $x++)
+        {
+            for ($y = 0; $y < $jml_kol; $y++)
+            {
+                $data_pasien[$x][$y] = $data_pasien_alfabet[$x][$atribut[$y]];
+            }
+        }
+        
+        $jml_per_fold = ($jml_data / $k) / 2;
+        $counter_0 = 0;
+        $counter_1 = 150;
+        //Inisialisasi array fold
+        $fold = array();
+        
+        //Membagi data ke dalam 10 partisi
+        for ($i = 0; $i < $k; $i++)
+        {
+            for ($j = 0; $j < $jml_per_fold; $j++)
+            {
+                $fold[$i][] = $data_pasien[$counter_0 + $j];
+                $fold[$i][] = $data_pasien[$counter_1 + $j];
+            }
+            $counter_0 += $jml_per_fold;
+            $counter_1 += $jml_per_fold;
+        }
+        
+        //Membagi partisi berdasarkan iterasi
+        $iterasi_k = array();
+        for ($m = 0; $m < $k; $m++)
+        {
+            $temp_array = array();
+            for ($n = 0; $n < $k; $n++)
+            {
+                if ($n != $m)
+                {
+                    $temp_array[] = $fold[$n];
+                }
+                else
+                {
+                    //Membuat data pengujian fold ke K
+                    $iterasi_k[$m]['pengujian'] = $fold[$n];
+                }
+            }
+            //Membuat data pelatihan fold ke-K
+            $iterasi_k[$m]['pelatihan'] = array_merge($temp_array[0], $temp_array[1], $temp_array[2], $temp_array[3],
+                $temp_array[4], $temp_array[5], $temp_array[6], $temp_array[7], $temp_array[8]);
+        }
+        
+        //echo 'jumlah per fold :'.count($fold[1]).'<br>';
+        //echo 'jumlah data :'.$jml_data;
+        
+        return $iterasi_k;      
+    }
+    
     function input_lvq()
     {
         $data['judul'] = 'Masukkan parameter uji';        
@@ -80,6 +143,348 @@ class Lvq2_controller extends CI_Controller{
         $this->load->view('input_lvq_view');
         $this->load->view('templates/footer');
     }
+    
+    //--------- PELATIHAN DAN PENGUJIAN DENGAN SELEKSI FITUR ------------
+    
+    function input_selection_lvq()
+    {
+        $data['judul'] = 'Masukkan parameter uji';
+        $this->load->view('templates/header', $data);
+        $this->load->view('input_selection_lvq_view');
+        $this->load->view('templates/footer');
+    }
+    
+    function lvq2_selection()
+    {
+        $start = microtime(true);
+        
+        //Ambil parameter dari form
+        $alpha = $this->input->post('ALPHA');
+        $epsilon = $this->input->post('EPSILON');
+        $max_epoch = $this->input->post('MAX_EPOCH');
+        $atribut = $this->input->post('atribut');
+        
+        //Bagi data menjadi 10 fold
+        $fold = $this->create_fold_selection($atribut);       
+        
+        
+        //Melakukan pelatihan dan pengujian sebanyak fold
+        for ($i = 0; $i < 10; $i++)
+        {
+            //Masukan id fold, alpha awal, epsilon, epoch maksimal, data latih dan alpha
+            echo 'Proses Fold ke-'.$i.'<br>';
+            $loop = $this->pelatihan_lvq_selection($i, $alpha, $epsilon, $max_epoch, $fold[$i], $alpha);
+            echo $loop;
+        }
+        $time = microtime(true)-$start;
+        echo 'waktu eksekusi : '.$time.'s';
+        
+        //Menghitung hasil pengujian rata-rata
+        $atribut_implode = implode(",", $atribut);
+        $jenis_uji = 'SELEKSI FITUR';
+        $hasil_pengujian_avg = $this->pengujian_avg($jenis_uji, $alpha, $epsilon, $max_epoch,$time, $atribut_implode);
+        
+        $data['judul'] = 'Hasil Pengujian LVQ2';
+        $data['hasil_uji_avg'] = $hasil_pengujian_avg;
+        $data['hasil_uji_fold'] = $this->data_model->get_data('hasil_pengujian_fold');
+        //$data['row'] = $loop;
+        $this->load->view('templates/header', $data);
+        $this->load->view('lvq2_result', $data);
+        $this->load->view('templates/footer');  
+        
+         /*$data['judul'] = 'LVQ2 Selection';
+         $data['data_pengujian'] = $fold[0]['pengujian'];
+         //$data['data_pengujian'] = $tes;
+         $this->load->view('templates/header', $data);
+         $this->load->view('data_lvq2_view', $data);
+         $this->load->view('templates/footer');*/
+    }    
+    
+    function pelatihan_lvq_selection($id_fold, $alpha_awal, $epsilon, $max_epoch, $fold, $alpha, $w1 = null, $w2 = null, $epoch = 0)
+    {
+        $jml_fold_latih = count(array_column($fold['pelatihan'], 0));
+        $jml_kol = count($fold['pelatihan'][0]);
+        $kol_kelas = $jml_kol - 1;
+        $key_1 = null;
+        $key_2 = null;
+        $window = 0.3;
+        //echo 'pelatihan epoch ke'.$epoch.' <br>';
+        //Periksa apabila variabel w1 dan w2 null
+        if ((is_null($w1) AND is_null($w2)) == TRUE)
+        {
+            //Isi variabel W1 dengan data dengan penyakit ginjal (CLASS = 1)
+            $key_1 = array_search(1, array_column($fold['pelatihan'], $kol_kelas));
+            $w1 = $fold['pelatihan'][$key_1];
+            //echo 'W1 ID ke '.$w1[0].'kelas W1 = '.$w1[$kol_kelas].'<br>';
+            //Isi variabel W2 dengan data dengan tanpa penyakit ginjal (CLASS = 0)
+            $key_2 = array_search(0, array_column($fold['pelatihan'], $kol_kelas));
+            $w2 = $fold['pelatihan'][$key_2];
+            //echo 'W2 ID ke '.$w2[0].'kelas W2 = '.$w2[$kol_kelas].'<br>';
+        }
+        
+        for ($i = 0; $i < $jml_fold_latih; $i++)
+        {
+            //echo ' i ke - '.$i.' happened <br>';
+            $w_champ = array();
+            $w_runn = array();
+            //Data yang dijadikan W1 dan W2 pertama tidak digunakan lagi
+            if (($i === $key_1) || ($i === $key_2))
+            {
+                //echo 'continue happened<br>';
+                continue;
+            }
+            else
+            {
+                //Menghitung jarak euclidean W1 dan W2 dengan data latih
+                $jarak_w1 = $this->euclidean_dist_selection($w1, $fold['pelatihan'][$i]);
+                //echo 'jarak W1 dengan data latih ke-'.$i.'adalah :'.$jarak_w1.'<br>';
+                $jarak_w2 = $this->euclidean_dist_selection($w2, $fold['pelatihan'][$i]);
+                //echo 'jarak W2 dengan data latih ke-'.$i.'adalah :'.$jarak_w2.'<br>';
+                if ($jarak_w1 < $jarak_w2)
+                {
+                    //echo 'W1 Pemenang <br>';
+                    //Jika W1 menjadi W pemenang
+                    $champ = 1;
+                    $w_champ = $w1;
+                    $w_runn = $w2;
+                    //Tentukan jarak data latih ke pemenang dan runner-up
+                    $d_champ = $jarak_w1;
+                    $d_runn = $jarak_w2;
+                }
+                else
+                {
+                    //echo 'W2 Pemenang <br>';
+                    //Jika W2 menjadi pemenang
+                    $champ = 2;
+                    $w_champ = $w2;
+                    $w_runn = $w1;
+                    //Tentukan jarak data latih ke pemenang dan runner-up
+                    $d_champ = $jarak_w2;
+                    $d_runn = $jarak_w1;
+                }
+                
+                //Memeriksa CLASS W Pemenang dan CLASS data latih
+                if ($w_champ[$kol_kelas] == $fold['pelatihan'][$i][$kol_kelas])
+                {
+                    //Jika kelas sama, maka W champ update tambah
+                    //echo 'Kelas data latih dan W sama <br>';
+                    $w_champ = $this->update_w_tambah_selection($alpha, $fold['pelatihan'][$i], $w_champ);
+                }
+                //Jika tidak, cek kondisi WINDOW
+                elseif ($this->cek_window($window, $d_champ, $d_runn) == TRUE)
+                {
+                    //Jika kondisi WINDOW terpenuhi
+                    //echo 'Window terpenuhi <br>';
+                    /*$dc_dr = $d_champ / $d_runn;
+                     $dr_dc = $d_runn / $d_champ;
+                     $window_min = 1 - $window;
+                     $window_plus = 1 + $window;
+                     echo 'dc / dr = '.$dc_dr.'> 1 - window = '.$window_min.'<br>';
+                     echo ' dr / dc ='.$dr_dc.'< 1 + window = '.$window_plus.'<br>';*/
+                    $w_champ = $this->update_w_kurang_selection($alpha, $fold['pelatihan'][$i], $w_champ);
+                    $w_runn = $this->update_w_tambah_selection($alpha, $fold['pelatihan'][$i], $w_runn);
+                }
+                else
+                {
+                    //Jika kondisi WINDOW tidak terpenuhi
+                    //echo 'Window tak terpenuhi <br>';
+                    $w_champ = $this->update_w_kurang_selection($alpha, $fold['pelatihan'][$i], $w_champ);
+                }
+            }
+            
+            //Memperbarui nilai W1 dan W2
+            if ($champ == 1)
+            {
+                //Jika W pemenang adalah W1
+                $w1 = $w_champ;
+                $w2 = $w_runn;
+            }
+            else
+            {
+                //Jika W pemenang adalah W2
+                $w1 = $w_runn;
+                $w2 = $w_champ;
+            }
+        }
+        
+        //Cek apakah pelatihan memenuhi syarat berhenti
+        if (($epoch >= $max_epoch) || ($alpha < $epsilon))
+        {
+            //Jika kondisi berhenti terpenuhi
+            //echo 'Proses pelatihan berhenti <br>';
+            //Masukkan detail pelatihan
+            $detail['alpha_awal'] = $alpha_awal;
+            $detail['alpha_akhir'] = $alpha;
+            $detail['epoch_max'] = $max_epoch;
+            $detail['epoch_akhir'] = $epoch;
+            $detail['epsilon'] = $epsilon;
+            //Mulai pengujian LVQ
+            $this->pengujian_lvq_selection($id_fold, $w1, $w2, $fold, $detail);
+        }
+        else
+        {
+            //Jika kondisi tak terpenuhi, ulang perhitungan
+            $epoch++;
+            $new_alpha = $alpha - (0.1 * $alpha);
+            $this->pelatihan_lvq_selection($id_fold, $alpha_awal, $epsilon, $max_epoch, $fold, $new_alpha, $w1, $w2, $epoch);
+        }
+    }
+    
+    function pengujian_lvq_selection($id_fold, $w1, $w2, $fold, $detail)
+    {
+        $jml_fold_uji = count(array_column($fold['pengujian'], 0));
+        $jml_kol = count($fold['pengujian'][0]);
+        $kol_kelas = $jml_kol - 1;
+        $true_neg = 0;
+        $false_neg = 0;
+        $true_pos = 0;
+        $false_pos = 0;
+        
+        for ($i = 0; $i < $jml_fold_uji; $i++)
+        {
+            $jarak_w1 = $this->euclidean_dist_selection($w1, $fold['pengujian'][$i]);
+            $jarak_w2 = $this->euclidean_dist_selection($w2, $fold['pengujian'][$i]);
+            
+            if ($jarak_w1 < $jarak_w2)
+            {
+                //Jika pemenang W1 dan kelas uji = 1
+                if ($w1[$kol_kelas] == $fold['pengujian'][$i][$kol_kelas])
+                {
+                    //echo 'Pemenang W1 dan kelas uji = 1, true_pos++<br>';
+                    $true_pos++;
+                }
+                else
+                //Jika pemenang W1 dan kelas uji = 0
+                {
+                    //echo 'Pemenang W1 tapi kelas uji = 0, false_pos++ <br>';
+                    $false_pos++;
+                }
+            }
+            else
+            {
+                if ($w2[$kol_kelas] == $fold['pengujian'][$i][$kol_kelas])
+                {
+                    //echo 'pemenang W2 dan kelas uji = 0, true_neg++ <br>';
+                    $true_neg++;
+                }
+                else
+                {
+                    //echo 'pemenang W2 tapi kelas uji = 1, false_neg++ <br>';
+                    $false_neg++;
+                }
+            }
+        }
+        
+        //Menghitung akurasi, error, sensitifitas dan spesifisitas
+        $akurasi = ($true_pos + $true_neg) / $jml_fold_uji;
+        $error = ($false_pos + $false_neg) / $jml_fold_uji;
+        $sensitifitas = $true_pos / ($true_pos + $false_neg);
+        $spesifisitas = $true_neg / ($true_neg + $false_pos);
+        
+        //echo 'True Positive = '.$true_pos.' dan False Positive = '.$false_pos.'<br>';
+        //echo 'True Negative = '.$true_neg.' dan False Negative = '.$false_neg.'<br>';
+        //echo 'Akurasi = '.$akurasi.' dan Error Rate = '.$error.'<br>';
+        //echo 'Sensitifitas = '.$sensitifitas.' dan Spesifisitas = '.$spesifisitas.'<br>';
+        //echo 'Alpha awal = '.$detail['alpha_awal'].' Alpha akhir '.$detail['alpha_akhir'].'<br>';
+        
+        //Update hasil pengujian fold
+        $hasil_uji['true_pos'] = $true_pos;
+        $hasil_uji['false_pos'] = $false_pos;
+        $hasil_uji['true_neg'] = $true_neg;
+        $hasil_uji['false_neg'] = $false_neg;
+        $hasil_uji['akurasi'] = $akurasi;
+        $hasil_uji['error'] = $error;
+        $hasil_uji['sensitifitas'] = $sensitifitas;
+        $hasil_uji['spesifisitas'] = $spesifisitas;
+        $this->data_model->update_hsl_uji($id_fold, $detail, $w1, $w2, $hasil_uji);
+    }
+    
+    function euclidean_dist_selection($x1, $x2)
+    {
+        //Cari jumlah kolom pada data masukan
+        $jml_kol = count($x1);
+        
+        //Kurangi dan kuadratkan tiap kolom kecuali ID dan CLASS
+        for($i = 1; $i < ($jml_kol - 1); $i++)
+        {
+            $kol[$i] = pow(($x1[$i] - $x2[$i]), 2);
+        }
+        
+        $jumlah = array_sum($kol);       
+        $jarak = sqrt($jumlah);  
+        
+        return $jarak;       
+    }
+    
+    function kurang_array_selection($x1, $x2)
+    {
+        //Cari jumlah kolom
+        $jml_kol = count($x1);
+        
+        $hasil[0] = $x2[0];
+        
+        //Kurangi kolom kecuali ID dan CLASS
+        for ($i = 1; $i < ($jml_kol - 1); $i++)
+        {            
+            $hasil[$i] = $x1[$i] - $x2[$i];
+        }
+        
+        //Tentukan nilai kelas
+        $hasil[($jml_kol - 1)] = $x2[($jml_kol - 1)];
+        
+        return $hasil;
+    }
+    
+    function kali_array_selection($nominal, $array)
+    {
+        //Cari jumlah kolom
+        $jml_kol = count($array);
+        
+        $hasil[0] = $array[0];
+        //Kali tiap kolom kecuali ID dan CLASS       
+        for ($i = 1; $i < ($jml_kol - 1); $i++)
+        {            
+            $hasil[$i] = $nominal * $array[$i];            
+        }        
+        $hasil[($jml_kol - 1)] = $array[($jml_kol - 1)];
+        
+        return $hasil;
+    }
+    
+    function tambah_array_selection($x1, $x2)
+    {
+        //Hitung jumlah kolom
+        $jml_kol = count($x1);
+        
+        $hasil[0] = $x1[0];
+        //Tambah tiap kolom kecuali ID dan CLASS
+        for ($i = 1; $i < ($jml_kol - 1); $i++)
+        {            
+            $hasil[$i] = $x1[$i] + $x2[$i];            
+        }
+        
+        $hasil[($jml_kol - 1)] = $x1[($jml_kol - 1)];
+        return $hasil;
+    }
+    
+    function update_w_tambah_selection($alpha, $data_latih, $w_bobot)
+    {
+        $temp_kurang_array = $this->kurang_array_selection($data_latih, $w_bobot);
+        $temp_kali_array = $this->kali_array_selection($alpha, $temp_kurang_array);
+        $w_baru = $this->tambah_array_selection($w_bobot, $temp_kali_array);
+        return $w_baru;
+    }
+    
+    function update_w_kurang_selection($alpha, $data_latih, $w_bobot)
+    {
+        $temp_kurang_array = $this->kurang_array_selection($data_latih, $w_bobot);
+        $temp_kali_array = $this->kali_array_selection($alpha, $temp_kurang_array);
+        $w_baru = $this->kurang_array_selection($w_bobot, $temp_kali_array);
+        $w_baru[0] = $w_bobot[0];
+        return $w_baru;
+    }
+    
+    //----- PELATIHAN DAN PENGUJIAN DENGAN SELURUH FITUR --
     
     function lvq2()
     {
@@ -99,14 +504,16 @@ class Lvq2_controller extends CI_Controller{
             echo 'Proses Fold ke-'.$i.'<br>';
             $loop = $this->pelatihan_lvq($i, $alpha, $epsilon, $max_epoch, $fold[$i], $alpha);
             echo $loop;
-        }      
+        }  
         
-        $time = microtime(true)-$start;        
+        $time = microtime(true)-$start;
         echo 'waktu eksekusi : '.$time.'s';
         
-       //Menghitung hasil rata-rata pengujian
-       $hasil_pengujian_avg = $this->pengujian_avg($alpha, $epsilon, $max_epoch,$time);
-        
+        //Menghitung hasil rata-rata pengujian
+        $atribut = 'SELURUH FITUR';
+        $jenis_uji = 'SELURUH FITUR';
+        $hasil_pengujian_avg = $this->pengujian_avg($jenis_uji, $alpha, $epsilon, $max_epoch,$time, $atribut);               
+       
         $data['judul'] = 'Hasil Pengujian LVQ2';
         $data['hasil_uji_avg'] = $hasil_pengujian_avg;
         $data['hasil_uji_fold'] = $this->data_model->get_data('hasil_pengujian_fold');
@@ -115,10 +522,9 @@ class Lvq2_controller extends CI_Controller{
         $this->load->view('lvq2_result', $data);
         $this->load->view('templates/footer');        
     }
-    
+        
     function pelatihan_lvq($id_fold, $alpha_awal, $epsilon, $max_epoch, $fold, $alpha, $w1 = null, $w2 = null, $epoch = 0)
-    {
-        //$jml_fold_uji = count(array_column($fold[0]['pengujian'], 'ID'));
+    {        
         $jml_fold_latih = count(array_column($fold['pelatihan'], 'ID'));
         $key_1 = null;
         $key_2 = null;        
@@ -314,7 +720,7 @@ class Lvq2_controller extends CI_Controller{
         $this->data_model->update_hsl_uji($id_fold, $detail, $w1, $w2, $hasil_uji);
     }
     
-    function pengujian_avg($alpha, $epsilon, $max_epoch, $runtime)
+    function pengujian_avg($jenis_uji, $alpha, $epsilon, $max_epoch, $runtime, $atribut)
     {
         //echo 'Pengujian AVG dimulai <br>';
         //Ambil data hasil uji tiap fold
@@ -340,6 +746,7 @@ class Lvq2_controller extends CI_Controller{
         
         //Memasukkan data ke database
         $hasil_uji_avg = array(
+            'JENIS_UJI' => $jenis_uji,
             'ALPHA_AWAL' => $alpha,
             'EPSILON' => $epsilon,
             'EPOCH_AKHIR_AVG' => $hasil_uji['epoch_akhir_avg'],
@@ -348,7 +755,8 @@ class Lvq2_controller extends CI_Controller{
             'ERROR' => $hasil_uji['error_avg'],
             'SENSITIFITAS' => $hasil_uji['sensitifitas_avg'],
             'SPESIFISITAS' => $hasil_uji['spesifisitas_avg'],
-            'RUNTIME' => $runtime
+            'RUNTIME' => $runtime,
+            'ATRIBUT' => $atribut
         );
         $this->data_model->insert_data('hasil_pengujian_avg',$hasil_uji_avg);
         

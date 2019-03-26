@@ -10,7 +10,10 @@
             <div class="row">
             	<div class="col-lg-12">
             		<a href="<?php echo base_url(); ?>Lvq2_controller/input_lvq" class="btn btn-outline btn-success btn-lg btn-block" role="button">
-            			Proses LVQ2
+            			Klasifikasi LVQ2
+            		</a>
+            		<a href="<?php echo base_url(); ?>Lvq2_controller/input_selection_lvq" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            			Klasifikasi LVQ2 Feature Selection
             		</a>
             		<a href="<?php echo base_url(); ?>Lvq2_controller/create_fold" class="btn btn-outline btn-success btn-lg btn-block" role="button">
             			Membuat Fold 
@@ -42,13 +45,15 @@
                                 <thead>
                                      <tr>
                         				<th>ID Pengujian</th>
+                        				<th>Jenis Pengujian</th>
                         				<th>Alpha Awal</th>
                         				<th>Epsilon</th>
                         				<th>Epoch Akhir Rata-rata</th>
                         				<th>Epoch Maksimal</th>
                         				<th>Tanggal Pengujian</th>                        				
                         				<th>Sensitifitas</th>
-                        				<th>Spesifisitas</th>                        				                     				
+                        				<th>Spesifisitas</th>
+                        				<th>Fitur</th>                        				                               				                     				
                     				</tr>
                                 </thead>
                                 <tbody>
@@ -60,13 +65,15 @@
 								    ?>
                                 	<tr>                                    	
                                     	<td><?php echo $row['ID_PENGUJIAN']; ?></td>
+                                    	<td><?php echo $row['JENIS_UJI']; ?></td>
                                     	<td><?php echo $row['ALPHA_AWAL']; ?></td>
                                     	<td><?php echo $row['EPSILON']; ?></td>
                                     	<td><?php echo $row['EPOCH_AKHIR_AVG']; ?></td>
                                     	<td><?php echo $row['EPOCH_MAX']; ?></td>
                                     	<td><?php echo $row['DATE_TIME']; ?></td>                                        
                                         <td><?php echo $row['SENSITIFITAS']; ?></td>
-                                        <td><?php echo $row['SPESIFISITAS']; ?></td> 
+                                        <td><?php echo $row['SPESIFISITAS']; ?></td>
+                                        <td><?php echo $row['ATRIBUT']; ?></td> 
                                     </tr>
                                 <?php } ?>
                                 <?php endif; ?>
