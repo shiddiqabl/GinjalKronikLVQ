@@ -35,7 +35,7 @@
                 <div  class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                           Data Penyakit Ginjal yang Sudah Dilakukan Pengisian Nilai Kosong Normalisasi KNN
+                           Data Penyakit Ginjal yang Sudah Dilakukan Normalisasi Minmax
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body" >

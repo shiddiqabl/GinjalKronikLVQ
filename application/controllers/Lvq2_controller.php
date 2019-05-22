@@ -67,11 +67,21 @@ class Lvq2_controller extends CI_Controller{
         return $iterasi_k;
         
         /*$data['judul'] = 'Membuat Fold';
-        $data['data_pasien'] = $iterasi_k[0]['pelatihan'];
+        $data['data_pengujian'] = $iterasi_k[0]['pengujian'];
         $this->load->view('templates/header', $data);
         $this->load->view('data_lvq2_view', $data);
         $this->load->view('templates/footer');*/
+    }      
+    
+    function input_lvq()
+    {
+        $data['judul'] = 'Masukkan parameter uji';        
+        $this->load->view('templates/header', $data);
+        $this->load->view('input_lvq_view');
+        $this->load->view('templates/footer');
     }
+    
+    //--------- PELATIHAN DAN PENGUJIAN DENGAN SELEKSI FITUR ------------
     
     function create_fold_selection($atribut)
     {
@@ -133,18 +143,8 @@ class Lvq2_controller extends CI_Controller{
         //echo 'jumlah per fold :'.count($fold[1]).'<br>';
         //echo 'jumlah data :'.$jml_data;
         
-        return $iterasi_k;      
+        return $iterasi_k;
     }
-    
-    function input_lvq()
-    {
-        $data['judul'] = 'Masukkan parameter uji';        
-        $this->load->view('templates/header', $data);
-        $this->load->view('input_lvq_view');
-        $this->load->view('templates/footer');
-    }
-    
-    //--------- PELATIHAN DAN PENGUJIAN DENGAN SELEKSI FITUR ------------
     
     function input_selection_lvq()
     {
@@ -157,7 +157,7 @@ class Lvq2_controller extends CI_Controller{
     function lvq2_selection()
     {
         $start = microtime(true);
-        
+        ini_set('max_execution_time', 300);
         //Ambil parameter dari form
         $alpha = $this->input->post('ALPHA');
         $epsilon = $this->input->post('EPSILON');
@@ -172,16 +172,16 @@ class Lvq2_controller extends CI_Controller{
         for ($i = 0; $i < 10; $i++)
         {
             //Masukan id fold, alpha awal, epsilon, epoch maksimal, data latih dan alpha
-            echo 'Proses Fold ke-'.$i.'<br>';
+            //echo 'Proses Fold ke-'.$i.'<br>';
             $loop = $this->pelatihan_lvq_selection($i, $alpha, $epsilon, $max_epoch, $fold[$i], $alpha);
             echo $loop;
         }
         $time = microtime(true)-$start;
-        echo 'waktu eksekusi : '.$time.'s';
+        //echo 'waktu eksekusi : '.$time.'s';
         
         //Menghitung hasil pengujian rata-rata
         $atribut_implode = implode(",", $atribut);
-        $jenis_uji = 'SELEKSI FITUR';
+        $jenis_uji = 'SELEKSI ATRIBUT';
         $hasil_pengujian_avg = $this->pengujian_avg($jenis_uji, $alpha, $epsilon, $max_epoch,$time, $atribut_implode);
         
         $data['judul'] = 'Hasil Pengujian LVQ2';
@@ -489,7 +489,8 @@ class Lvq2_controller extends CI_Controller{
     function lvq2()
     {
         $start = microtime(true);
-        //Bagi data menjadi 10 fold
+        ini_set('max_execution_time', 300);
+		//Bagi data menjadi 10 fold
         $fold = $this->create_fold();
         
         //Ambil parameter dari form
@@ -501,17 +502,17 @@ class Lvq2_controller extends CI_Controller{
         for ($i = 0; $i < 10; $i++)
         {
             //Masukan id fold, alpha awal, epsilon, epoch maksimal, data latih dan alpha
-            echo 'Proses Fold ke-'.$i.'<br>';
+            //echo 'Proses Fold ke-'.$i.'<br>';
             $loop = $this->pelatihan_lvq($i, $alpha, $epsilon, $max_epoch, $fold[$i], $alpha);
             echo $loop;
         }  
         
         $time = microtime(true)-$start;
-        echo 'waktu eksekusi : '.$time.'s';
+        //echo 'waktu eksekusi : '.$time.'s';
         
         //Menghitung hasil rata-rata pengujian
-        $atribut = 'SELURUH FITUR';
-        $jenis_uji = 'SELURUH FITUR';
+        $atribut = 'SELURUH ATRIBUT';
+        $jenis_uji = 'SELURUH ATRIBUT';
         $hasil_pengujian_avg = $this->pengujian_avg($jenis_uji, $alpha, $epsilon, $max_epoch,$time, $atribut);               
        
         $data['judul'] = 'Hasil Pengujian LVQ2';

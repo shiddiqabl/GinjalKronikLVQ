@@ -10,14 +10,14 @@
             <div class="row">
             	<div class="col-lg-12">
             		<a href="<?php echo base_url(); ?>Lvq2_controller/input_lvq" class="btn btn-outline btn-success btn-lg btn-block" role="button">
-            			Klasifikasi LVQ2
+            			Klasifikasi LVQ2 
             		</a>
             		<a href="<?php echo base_url(); ?>Lvq2_controller/input_selection_lvq" class="btn btn-outline btn-success btn-lg btn-block" role="button">
-            			Klasifikasi LVQ2 Feature Selection
+            			Klasifikasi LVQ2 Seleksi Atribut
             		</a>
-            		<a href="<?php echo base_url(); ?>Lvq2_controller/create_fold" class="btn btn-outline btn-success btn-lg btn-block" role="button">
+            		<!-- <a href="<?php echo base_url(); ?>Lvq2_controller/create_fold" class="btn btn-outline btn-success btn-lg btn-block" role="button">
             			Membuat Fold 
-            		</a>            		            		
+            		</a> -->           		            		
             		<button type="button" class="btn btn-outline btn-danger btn-lg btn-block" data-toggle="modal" data-target="#delete_modal"							
 							data-url="<?php echo base_url();?>Lvq2_controller/hapus_data/hasil_pengujian_avg"> 
 							Hapus Data Pengujian
@@ -35,7 +35,7 @@
                 <div  class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                           Daftar Pengujian LVQ2
+                           Daftar Hasil Pengujian LVQ2
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body" >
@@ -53,7 +53,7 @@
                         				<th>Tanggal Pengujian</th>                        				
                         				<th>Sensitifitas</th>
                         				<th>Spesifisitas</th>
-                        				<th>Fitur</th>                        				                               				                     				
+                        				<th>Atribut</th>                        				                               				                     				
                     				</tr>
                                 </thead>
                                 <tbody>
@@ -73,7 +73,34 @@
                                     	<td><?php echo $row['DATE_TIME']; ?></td>                                        
                                         <td><?php echo $row['SENSITIFITAS']; ?></td>
                                         <td><?php echo $row['SPESIFISITAS']; ?></td>
-                                        <td><?php echo $row['ATRIBUT']; ?></td> 
+                                        <td><?php echo $row['ATRIBUT']; ?></td>
+                                        
+                                        <!--  <td><?php echo $row['ID']; ?></td>
+                                        <td><?php echo $row['AGE']; ?></td>
+                                        <td><?php echo $row['BP']; ?></td>
+                                        <td><?php echo $row['SG']; ?></td>
+                                        <td><?php echo $row['AL']; ?></td>
+                                        <td><?php echo $row['SU']; ?></td>
+                                        <td><?php echo $row['RBC']; ?></td>
+                                        <td><?php echo $row['PC']; ?></td>
+                                        <td><?php echo $row['PCC']; ?></td>
+                                        <td><?php echo $row['BA']; ?></td>
+                                        <td><?php echo $row['BGR']; ?></td>
+                                        <td><?php echo $row['BU']; ?></td>
+                                        <td><?php echo $row['SC']; ?></td>
+                                        <td><?php echo $row['SOD']; ?></td>
+                                        <td><?php echo $row['POT']; ?></td>
+                                        <td><?php echo $row['HEMO']; ?></td>
+                                        <td><?php echo $row['PCV']; ?></td>
+                                        <td><?php echo $row['WBCC']; ?></td>
+                                        <td><?php echo $row['RBCC']; ?></td>
+                                        <td><?php echo $row['HTN']; ?></td>
+                                        <td><?php echo $row['DM']; ?></td>
+                                        <td><?php echo $row['CAD']; ?></td>
+                                        <td><?php echo $row['APPET']; ?></td>
+                                        <td><?php echo $row['PE']; ?></td>
+                                        <td><?php echo $row['ANE']; ?></td>
+                                        <td><?php echo $row['CLASS']; ?></td>-->
                                     </tr>
                                 <?php } ?>
                                 <?php endif; ?>

@@ -1,7 +1,7 @@
 		<div id="page-wrapper">
 			<div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Masukkan parameter uji LVQ</h1>
+                    <h1 class="page-header">Masukkan Parameter Uji LVQ2</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -10,7 +10,7 @@
             	<div class="col-lg-12">
                     <div class="panel panel-default">
                     	<div class="panel-heading">
-                           Form Parameter Uji LVQ
+                           Form Parameter Uji LVQ2
                        	</div>
                        	<div class="panel-body">
                        		<div class="row">
