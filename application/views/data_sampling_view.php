@@ -28,7 +28,7 @@
             			Tes perhitungan K-Means buat laporan
             		</a>-->                         		
             		<a href="<?php echo base_url(); ?>Sampling_controller/exportcsv/data_pasien_sampling" class="btn btn-outline btn-info btn-lg btn-block" role="button">
-            			Export Data Pasien KNN
+            			Export Data Pasien Undersampling
             		</a>             		
             		<button type="button" class="btn btn-outline btn-danger btn-lg btn-block" data-toggle="modal" data-target="#delete_modal"							
 							data-url="<?php echo base_url();?>Sampling_controller/hapus_data/data_pasien_sampling"> 
@@ -119,10 +119,14 @@
                                         <td><?php echo $row['ANE']; ?></td>
                                         <td><?php echo $row['CLASS']; ?></td>
                                         
-                                        <!-- <td><?php echo $row[0]; ?></td>
-                                        <td><?php echo $row[1]; ?></td>
+                                        <!--  <td><?php echo $row['ID_PASIEN']; ?></td>
+                                        <td><?php echo $row['JARAK_KE_CENTROID']; ?></td>
+                                       	<td><?php echo $row['KLUSTER']; ?></td>
+                                        <td><?php echo $row['CLASS']; ?></td>
+                                       	<td><?php echo $row[0]; ?></td>
+                                       	<td><?php echo $row[1]; ?></td>
                                        	<td><?php echo $row[2]; ?></td>
-                                        <td><?php echo $row[3]; ?></td>
+                                       	<td><?php echo $row[3]; ?></td>
                                        	<td><?php echo $row[4]; ?></td>
                                         <td><?php echo $row[5]; ?></td>
                                         <td><?php echo $row[6]; ?></td>
