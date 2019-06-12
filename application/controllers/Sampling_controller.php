@@ -28,6 +28,27 @@ class Sampling_controller extends CI_Controller{
         $deskripsi_kluster = array();
         $tabel_minoritas = array();
         $mayoritas_per_kluster = array();
+        $kluster_ma = array();
+        
+        //Inisialisasi tabel anggota mayoritas per kluster
+        /*for ($o = 0; $o < $jml_centroid; $o++)
+        {
+            $kluster_ma[$o][] = $o; //ID kluster            
+        }*/
+        
+        //Memasukkan data anggota per kluster 
+        for ($p = 0; $p < $jml_data; $p++)
+        {
+            $data_ambil = $data_kluster[$p];
+            for ($q = 0; $q < $jml_centroid; $q++)
+            {
+                if ($data_ambil['KLUSTER'] == $q && $data_ambil['CLASS'] == 1)
+                {
+                    $kluster_ma[$q][] = $data_ambil;
+                }
+            }            
+        }
+        
         //Inisialisasi tabel deskripsi kluster
         for($i = 0; $i < $jml_centroid; $i++)
         {
@@ -93,8 +114,9 @@ class Sampling_controller extends CI_Controller{
         
         //Mengambil sampel mayoritas dari masing-masing kluster
         $tabel_mayoritas = array();
+        $tabel_temp = array();
         
-        for ($m = 0; $m < $jml_centroid; $m++)
+        /*for ($m = 0; $m < $jml_centroid; $m++)
         {
             $id_sampel = array();
             $jml_sampel = $deskripsi_kluster[$m][4];
@@ -115,13 +137,34 @@ class Sampling_controller extends CI_Controller{
                     $tabel_mayoritas[] = $data_alias[$id];
                 }
             }            
-        }
+        }*/
+        
+        for($n = 0; $n < $jml_centroid; $n++)        
+        {
+            $id_terdekat = array();
+            $jml_sampel = $deskripsi_kluster[$n][4];
+            echo 'Jumlah sampel ke-'.$n.' sebesar = '.$jml_sampel.'<br>';            
+            usort($kluster_ma[$n], function($a, $b) //Menyortir tabel kluster_ma dari yang terdekat hingga terjauh
+            {
+                return $b['JARAK_KE_CENTROID'] < $a['JARAK_KE_CENTROID'];
+            });                
+            //Memotong data dengan jarak terdekat
+            $tabel_terdekat[$n] = array_slice($kluster_ma[$n], 0, $jml_sampel);
+            //Mengambil id data dengan jarak terdekat
+            $id_terdekat = array_column($tabel_terdekat[$n], 'ID_PASIEN');
+            //Mengambil data anggota terdekat 
+            for($o = 0; $o < $jml_sampel; $o++)
+            {
+              $id = array_search($id_terdekat[$o], array_column($data_alias, 0));
+              $tabel_mayoritas[] = $data_alias[$id];
+            }            
+        } 
         
         //Menggabungkan tabel mayoritas dengan tabel minoritas
         $tabel_gabungan = array_merge($tabel_mayoritas, $tabel_minoritas);      
         
         //Memasukkan data ke database
-        $this->data_model->insert_data_sampling('data_pasien_sampling', $tabel_gabungan);
+        //$this->data_model->insert_data_sampling('data_pasien_sampling', $tabel_gabungan);
         
         $time = microtime(true) - $start;
         echo 'waktu eksekusi : '.$time.'s <br>';
@@ -131,7 +174,7 @@ class Sampling_controller extends CI_Controller{
         echo 'perbandingan total :'.$perbandingan_total; 
         
         $data['judul'] = 'Kelola Data Pengisian Nila Kosong';
-        $data['data_pasien'] = $this->data_model->get_data('data_pasien_sampling');;
+        $data['data_pasien'] = $this->data_model->get_data('data_pasien_sampling');        
         $this->load->view('templates/header', $data);
         $this->load->view('data_sampling_view', $data);
         $this->load->view('templates/footer');
